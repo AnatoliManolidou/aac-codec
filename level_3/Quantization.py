@@ -80,12 +80,17 @@ def aac_quantizer(frame_F, frame_type, SMR):
             X_band = X_sub[start_idx:end_idx]
 
             a = a_hat
+            best_a = a
+            best_S_band = None
 
             while True:
                 S_band = np.sign(X_band) * np.floor((np.abs(X_band) * (2**(-0.25*a)))** (3/4) + magic_num)
 
-                # If all symbols are quantized to zero, no point increasing a further
+                # If all symbols are quantized to zero, use last good state if available
                 if np.all(S_band == 0):
+                    if best_S_band is not None:
+                        a = best_a
+                        S_band = best_S_band
                     break
 
                 X_hat_band = np.sign(S_band) * (np.abs(S_band) ** (4/3)) * (2**(0.25*a))
@@ -93,11 +98,21 @@ def aac_quantizer(frame_F, frame_type, SMR):
                 Pe_b = np.sum((X_band - X_hat_band) ** 2)
 
                 if Pe_b < T_b[b]:
+                    # Distortion below threshold - saving this state as the best one and try increasing a for better compression
+                    best_a = a
+                    best_S_band = S_band.copy()
                     a += 1
 
                     if b > 0 and abs(a - alpha[b-1]) > 60:
+                        # Revert to last good state 
+                        a = best_a
+                        S_band = best_S_band
                         break
                 else:
+                    # Distortion exceeded threshold — revert to last good state
+                    if best_S_band is not None:
+                        a = best_a
+                        S_band = best_S_band
                     break
 
             alpha[b] = a
