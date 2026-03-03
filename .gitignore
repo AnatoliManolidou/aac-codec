@@ -1,0 +1,8 @@
+output_level1.wav
+output_level2.wav
+
+level_1/__pycache__/
+level_2/__pycache__/
+level_3/__pycache__/
+Material/__pycache__/
+.venv/
