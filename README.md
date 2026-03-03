@@ -56,13 +56,13 @@ aac-codec/
 
 ## Modules
 
-### Filter Bank
+### Filter Bank *(Level 1)*
 Implements the **Modified Discrete Cosine Transform (MDCT)** and its inverse (IMDCT) with KBD / sinusoidal analysis–synthesis windows. Supports four frame types: OLS, LSS, ESH, LPS — including the 8×256 short-block transform for transients.
 
-### SSC — Sequence Segmentation Control
+### SSC — Sequence Segmentation Control *(Level 1)*
 Classifies each frame as *Only Long Sequence*, *Long Start*, *Eight Short Sequence*, or *Long Stop* based on a high-pass filtered energy-attack detection on the next frame. Combines per-channel decisions via a lookup table.
 
-### TNS — Temporal Noise Shaping *(Level 2+)*
+### TNS — Temporal Noise Shaping *(Level 2)*
 Applies a 4th-order linear-prediction FIR filter to MDCT coefficients to shape quantization noise in the time domain so it is masked by transients. The decoder applies the corresponding IIR inverse filter.
 
 ### Psychoacoustic Model *(Level 3)*
@@ -128,11 +128,19 @@ Each demo writes the reconstructed audio to `Output/` and prints the **SNR (dB)*
 
 ## Results
 
-| Level | SNR | Compression |
-|:-----:|:---:|:-----------:|
-| 1 | ≈ ∞ (lossless transform) | 1 : 1 |
-| 2 | ≈ ∞ (lossless transform) | 1 : 1 |
-| 3 | lossy — depends on content | real compression |
+Test signal: **LicorDeCalandraca.wav** — stereo, 48 kHz, 16-bit (original bitrate 1 536 kbps)
+
+| Level | SNR (dB) | Noise Power | Bitrate (kbps) | Compression |
+|:-----:|:--------:|:-----------:|:--------------:|:-----------:|
+| 1 | 253.99 | ≈ 8.1 × 10⁻²² | 1 536 | 1 : 1 |
+| 2 | 253.99 | ≈ 8.1 × 10⁻²² | 1 536 | 1 : 1 |
+| 3 | **10.50** | — | **264.6** | **5.80 : 1** |
+
+### Observations
+
+- **Levels 1 & 2** are lossless round-trips (the only "noise" is floating-point precision). Adding TNS does not introduce any loss because the FIR analysis and IIR synthesis filters use the same quantized coefficients, making the process perfectly invertible.
+- **Level 3** introduces lossy quantization guided by the psychoacoustic model. Despite the significant SNR drop, the reconstructed audio exhibits minimal perceptible degradation — barely noticeable on first listen — since the quantization noise is shaped to stay below the masking threshold of the human ear.
+- The achieved bitrate of **~265 kbps** for stereo comfortably exceeds the ITU-R broadcast quality threshold, which AAC typically reaches at 128 kbps for stereo signals.
 
 ---
 
