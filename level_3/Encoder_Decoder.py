@@ -6,12 +6,12 @@ import sys
 from scipy.io import savemat
 
 # Import level_1
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'level_1')) 
+sys.path.append(os.path.join(os.path.dirname(__file__), '..')) 
 from SSC import SSC
 from Filter_Bank import filter_bank, i_filter_bank
 
 # Import level_2
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'level_2')) 
+sys.path.append(os.path.join(os.path.dirname(__file__), '..')) 
 from TNS import tns, i_tns
 
 # Import Huffman Utils

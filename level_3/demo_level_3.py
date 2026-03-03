@@ -69,21 +69,19 @@ def demo_aac_3(filename_in, filename_out, filename_aac_coded):
         for channel in ['chl', 'chr']:
             ch_data = frame[channel]
            
-            # Bits from Huffman Stream
+            # Bits from MDCT Stream
             for bits in ch_data['stream']:
                 total_bits += len(bits)
 
             # Bits from scalefactors stream
             total_bits += len(ch_data['sfc'])  
-        
-            # Bits from codebooks
 
-            # MDCT
+            # Bits from MDCT codebooks
             mdct_cb_len = ch_data['codebook'].size
             total_bits += mdct_cb_len * 4  # Assuming 4 bits per codebook index
 
-            # scalefactors
-            total_bits +=  4  # Assuming 4 bits per scalefactor codebook index
+            # Bits from scalefactor codebooks
+            total_bits +=  4  # Assuming 4 bits only cause it is scalar
 
             # Bits from Global Gain
             if np.isscalar(ch_data['G']):
