@@ -48,8 +48,16 @@ aac-codec/
 ├── Material/                # Shared data & utilities
 │   ├── huff_utils.py
 │   ├── huffCodebooks.mat
-│   └── TableB219.mat
-└── Output/                  # Reconstructed audio & encoded data
+│   ├── TableB219.mat
+│   └── LicorDeCalandraca.wav
+├── Output/                  # Reconstructed audio & encoded data
+│   ├── encoded_seq.mat
+│   ├── output_level1.wav
+│   ├── output_level2.wav
+│   └── output_level3.wav
+├── Manolidou_Anatoli_Report.pdf
+├── mm-2025-hw-v0.1.pdf
+└── README.md
 ```
 
 ---
@@ -109,7 +117,7 @@ pip install numpy scipy soundfile
 
 ### Running
 
-Place a **stereo 48 kHz WAV** file named `LicorDeCalandraca.wav` inside `Material/`, then from the repo root:
+Ensure a **stereo 48 kHz WAV** file named `LicorDeCalandraca.wav` exists in `Material/`, then run from the repo root:
 
 ```bash
 # Level 1 — lossless MDCT round-trip
@@ -121,7 +129,6 @@ python level_2/demo_level_2.py
 # Level 3 — full lossy AAC encode/decode
 python level_3/demo_level_3.py
 ```
-
 Each demo writes the reconstructed audio to `Output/` and prints the **SNR (dB)**. Level 3 additionally reports **bitrate** and **compression ratio**.
 
 ---
