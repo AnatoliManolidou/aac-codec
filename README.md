@@ -17,8 +17,8 @@ A from-scratch implementation of a simplified [AAC](https://en.wikipedia.org/wik
 | Level | Description | Lossy? |
 |:-----:|-------------|:------:|
 | **1** | MDCT filter bank with adaptive windowing | No |
-| **2** | + Temporal Noise Shaping (TNS) | No |
-| **3** | + Psychoacoustic model, quantization & Huffman coding | **Yes** |
+| **2** | Temporal Noise Shaping (TNS) | No |
+| **3** | Psychoacoustic model, quantization & Huffman coding | **Yes** |
 
 ---
 
